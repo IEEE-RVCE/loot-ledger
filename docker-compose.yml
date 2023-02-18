@@ -1,0 +1,76 @@
+services:
+  # lootledger:
+  #   container_name: lootledger
+  #   image: lootledger
+  #   restart: unless-stopped
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #     target: development # Only will build development stage from our dockerfile
+  #   volumes:
+  #     - ./:/usr/src/app
+  #   ports:
+  #     - ${PORT}:${PORT}
+  #   networks:
+  #     - lootledger-network
+  #   env_file: 
+  #     - .env # Available inside container not in compose file
+  #   environment:
+  #     - DB_HOST=lootledger-db
+  #     - REDIS_HOST=lootledger-redis
+  #   depends_on:
+  #     lootledger-db:
+  #       condition: service_healthy
+  #     lootledger-redis:
+  #       condition: service_healthy
+  #   command: npm run start:dev # Run in development mode
+
+  lootledger-db:
+    container_name: lootledger-db
+    image: mysql:8.0
+    restart: unless-stopped
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - 3307:3306
+    networks:
+      - lootledger-network
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      TZ: 'utc'
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ['CMD', 'mysqladmin', '-u${DB_USER}', '-p${DB_PASSWORD}', 'ping']
+      interval: 5s
+      retries: 3
+      timeout: 3s
+
+  lootledger-redis:
+    container_name: lootledger-redis
+    image: redis:alpine
+    restart: unless-stopped
+    volumes:
+      - redis:/data
+    ports:
+      - 6380:${REDIS_PORT}
+    networks:
+      - lootledger-network
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      retries: 3
+      timeout: 3s
+
+volumes:
+  mysql:
+    name: lootledger-db
+  redis:
+    name: lootledger-redis
+
+networks:
+  lootledger-network:
+    name: lootledger-network
+    driver: bridge
