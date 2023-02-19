@@ -1,14 +1,14 @@
 {
-  "name": "detective",
+  "name": "lootledger",
   "version": "0.0.1",
-  "description": "backend for lootledger",
+  "description": "backend for accounts",
   "authors": [
     {
       "name": "Prajwal P",
       "email": "prajwalprakash3722@gmail.com"
     }
   ],
-  "private": false,
+  "private": true,
   "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist",
@@ -26,7 +26,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "prepare": "husky install",
     "docker:up": "docker-compose up -d -V --build",
-    "docker:down": "docker-compose down"
+    "docker:down": "docker-compose down",
+    "docker:down-volume": "docker-compose down -v"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

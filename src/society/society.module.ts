@@ -7,10 +7,11 @@ import { SocietyController } from './controllers/society.controller';
 import { SocietyService } from './services/society.service';
 import { UsersService } from 'src/users/services/users.service';
 import { User } from 'src/users/entities/user.entitiy';
+import { BcryptService } from 'src/auth/services/bcrypt.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Society, MemberOf, User])],
   controllers: [SocietyController],
-  providers: [SocietyService, JwtService, UsersService],
+  providers: [SocietyService, JwtService, UsersService, BcryptService],
 })
 export class SocietyModule {}

@@ -94,4 +94,22 @@ export class SocietyController {
     }
     return memberOf;
   }
+
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiOkResponse({
+    description: 'List All Members of Society',
+    type: Society,
+  })
+  @ApiBearerAuth()
+  @Get('/members/:sid')
+  async listMembers(@Param('sid') sid: string): Promise<void> {
+    const memberOf = await this.societyService.getMembersOfSociety(sid);
+    // if (!memberOf) {
+    //   throw new HttpException(
+    //     'Something Went Wrong',
+    //     HttpStatus.INTERNAL_SERVER_ERROR,
+    //   );
+    // }
+    // return memberOf;
+  }
 }

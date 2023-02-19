@@ -1,4 +1,6 @@
 services:
+
+  # commented out for now as we are using `yarn start:dev` for development only (can uncomment this if you want to use docker-compose for development)
   # lootledger:
   #   container_name: lootledger
   #   image: lootledger
@@ -43,7 +45,14 @@ services:
       TZ: 'utc'
     command: --default-authentication-plugin=mysql_native_password
     healthcheck:
-      test: ['CMD', 'mysqladmin', '-u${DB_USER}', '-p${DB_PASSWORD}', 'ping']
+      test:
+        [
+          'CMD',
+          'mysqladmin',
+          '-u${DB_USER}',
+          '-p${DB_PASSWORD}',
+          'ping'
+        ]
       interval: 5s
       retries: 3
       timeout: 3s
@@ -59,7 +68,7 @@ services:
     networks:
       - lootledger-network
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: [ 'CMD', 'redis-cli', 'ping' ]
       interval: 5s
       retries: 3
       timeout: 3s

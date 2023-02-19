@@ -91,4 +91,25 @@ export class SocietyService {
       throw error;
     }
   }
+
+  async getMembersOfSociety(sid: string): Promise<void> {
+    const society = await this.getSocietyById(sid);
+    if (!society) {
+      throw new HttpException(
+        `Society Id [${sid}] doesn't exist`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const members = await this.societyRepository.manager.find(MemberOf, {
+      where: {
+        society,
+      },
+      relations: ['user'],
+    });
+
+    // add position to the user object
+
+    // return members.map((member) => member.user);
+  }
 }

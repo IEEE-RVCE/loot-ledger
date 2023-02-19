@@ -7,6 +7,7 @@ import { AuthController } from './controllers/auth.controller';
 import { BcryptService } from './services/bcrypt.service';
 import { User } from '../users/entities/user.entitiy';
 import jwtConfig from '../common/config/jwt.config';
+import { UsersService } from 'src/users/services/users.service';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import jwtConfig from '../common/config/jwt.config';
     JwtModule.registerAsync(jwtConfig.asProvider()),
   ],
   controllers: [AuthController],
-  providers: [AuthService, BcryptService],
+  providers: [AuthService, BcryptService, UsersService],
   exports: [JwtModule],
 })
 export class AuthModule {}

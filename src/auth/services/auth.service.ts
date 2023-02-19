@@ -18,6 +18,8 @@ import { User } from '../../users/entities/user.entitiy';
 import { BcryptService } from './bcrypt.service';
 import { SignInDto } from '../dto/sign-in.dto';
 import { SignUpDto } from '../dto/sign-up.dto';
+import { MemberOf } from 'src/society/entities/member.entitiy';
+import { UsersService } from 'src/users/services/users.service';
 
 @Injectable()
 export class AuthService {
@@ -26,31 +28,20 @@ export class AuthService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     private readonly bcryptService: BcryptService,
     private readonly jwtService: JwtService,
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
     private readonly redisService: RedisService,
+    private readonly userService: UsersService,
   ) {}
 
   async signUp(signUpDto: SignUpDto): Promise<void> {
     const { password, passwordConfirm, ...userParams } = signUpDto;
-
-    try {
-      const user = new User();
-      Object.assign(user, userParams);
-      user.password = await this.bcryptService.hash(password);
-      await this.userRepository.save(user);
-    } catch (error) {
-      if (error.code === MysqlErrorCode.UniqueViolation) {
-        throw new ConflictException(`User [${userParams.email}] already exist`);
-      }
-      throw error;
-    }
+    await this.userService.createUser({ ...userParams, password });
   }
 
   async signIn(signInDto: SignInDto): Promise<{ accessToken: string }> {
     const { email, password } = signInDto;
 
-    const user = await this.userRepository.findOneBy({ email });
+    const user = await this.userService.getUserByEmail(email);
+
     if (!user) {
       throw new BadRequestException('Invalid email');
     }
@@ -72,6 +63,7 @@ export class AuthService {
         id: user.id,
         email: user.email,
         tokenId,
+        position: user.memberOf[0].position,
       } as ActiveUserData,
       {
         secret: this.jwtConfiguration.secret,
