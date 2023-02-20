@@ -1,9 +1,15 @@
+export enum Role {
+  'USER' = 'USER',
+  'ADMIN' = 'ADMIN',
+  'SUPER_ADMIN' = 'SUPER_ADMIN',
+}
+
 export enum UserType {
   'FACULTY' = 'FACULTY',
   'STUDENT' = 'STUDENT',
   'ADMIN' = 'ADMIN',
 }
-
+5;
 export enum memberPosition {
   'CHAIR' = 'CHAIR',
   'VICE_CHAIR' = 'VICE_CHAIR',

@@ -22,8 +22,8 @@ export class addMemberSocietyDto {
     example: 'CHAIR',
   })
   @IsNotEmpty()
-  @MinLength(3)
-  @MaxLength(10)
+  @MinLength(5)
+  @MaxLength(15)
   @IsEnum(memberPosition)
   position: memberPosition;
 

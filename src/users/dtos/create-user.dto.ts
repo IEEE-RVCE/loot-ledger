@@ -1,4 +1,4 @@
-import { UserType } from 'src/common/types/common.types';
+import { Role, UserType } from 'src/common/types/common.types';
 
 export type userParams = {
   email: string;

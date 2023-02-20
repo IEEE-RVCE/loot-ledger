@@ -72,7 +72,7 @@ $ yarn test:watch
 
 ## Note
 
-- This project is still under development
+- This project is still under development, there are lot of ideas and featuers to be added, for ideas take a look at [ideas.md](./IDEAS.md), roadmap will be added soon.
 - This Project has auto commit message formatting on commit using [Husky](https://typicode.github.io/husky/#/) and [Commitlint](https://commitlint.js.org/#/), so make sure you follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) format when commiting your changes.
 
 ## License

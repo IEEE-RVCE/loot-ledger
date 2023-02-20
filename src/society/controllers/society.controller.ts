@@ -100,7 +100,7 @@ export class SocietyController {
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiOkResponse({
     description: 'List All Members of Society',
-    type: Society,
+    type: Array<SocietyMember>,
   })
   @ApiBearerAuth()
   @Get('/members/:sid')

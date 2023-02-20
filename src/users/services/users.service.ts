@@ -35,7 +35,7 @@ export class UsersService {
     try {
       const user = new User();
       user.password = await this.bcryptService.hash(userDeets.password);
-      Object.assign(user, user);
+      Object.assign(user, userDeets);
       return await this.userRepository.save(user);
     } catch (error) {
       if (error.code === MysqlErrorCode.UniqueViolation) {
@@ -45,11 +45,15 @@ export class UsersService {
     }
   }
 
-  async getUserByEmail(email: string): Promise<User> {
+  async getUserByEmailWithSociety(email: string): Promise<User> {
     return await this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.memberOf', 'memberOf')
       .where('user.email = :email', { email: email })
       .getOne();
+  }
+
+  async getUserByEmail(email: string): Promise<User> {
+    return await this.userRepository.findOneBy({ email });
   }
 }

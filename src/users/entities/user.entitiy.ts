@@ -1,8 +1,9 @@
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Exclude } from 'class-transformer';
-import { UserType } from 'src/common/types/common.types';
+import { Role, UserType } from 'src/common/types/common.types';
 import { MemberOf } from 'src/society/entities/member.entitiy';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   Entity,
@@ -14,7 +15,7 @@ import {
 @Entity({
   name: 'users',
 })
-export class User {
+export class User extends BaseEntity {
   @ApiProperty({
     description: 'ID of user',
     example: '89c018cc-8a77-4dbd-94e1-dbaa710a2a9c',
@@ -62,6 +63,14 @@ export class User {
   @Column({ default: true })
   isActive: boolean;
 
+  @ApiProperty({ description: 'User is verified', example: 'true/false' })
+  @Column({ default: false })
+  isVerified: boolean;
+
+  @ApiProperty({ description: 'User Role', example: 'USER', enum: Role })
+  @Column({ default: Role.USER })
+  role: Role;
+
   @ApiProperty({ description: 'Created date of user' })
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -70,6 +79,11 @@ export class User {
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
 
-  @OneToMany(() => MemberOf, (memberOf) => memberOf.user)
+  // on delete cascade set null in memberOf table
+  @OneToMany(() => MemberOf, (memberOf) => memberOf.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   public memberOf: MemberOf[];
 }

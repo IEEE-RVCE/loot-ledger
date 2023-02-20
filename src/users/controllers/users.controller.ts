@@ -1,10 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Delete, Get, Put, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { RoleGuard } from 'src/auth/guards/role.guard';
+import { Roles } from 'src/auth/roles/roles.decorator';
 import { ActiveUser } from '../../common/decorators/active-user.decorator';
 
 import { User } from '../entities/user.entitiy';
@@ -12,6 +15,7 @@ import { UsersService } from '../services/users.service';
 
 @ApiTags('user')
 @Controller('user')
+@UseGuards(JwtAuthGuard, RoleGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -23,6 +27,7 @@ export class UsersController {
     return this.usersService.getMe(userId);
   }
 
+  @Roles('ADMIN')
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiOkResponse({
     description: 'Get All Users',
@@ -33,5 +38,17 @@ export class UsersController {
   @Get('all')
   async getAllUsers(): Promise<User[]> {
     return this.usersService.getAllUsersFromDb();
+  }
+
+  // TODO Implement update user service
+  @Put('')
+  async updateUser(): Promise<User> {
+    return null;
+  }
+
+  // TODO Implement delete user service
+  @Delete('')
+  async deleteUser(): Promise<User> {
+    return null;
   }
 }
