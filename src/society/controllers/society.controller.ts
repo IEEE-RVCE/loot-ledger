@@ -15,6 +15,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { SocietyMember } from 'src/common/types/common.types';
 import { addMemberSocietyDto } from '../dto/create-member.dto';
 import { createSocietyDto } from '../dto/create-society.dto';
 import { MemberOf } from '../entities/member.entitiy';
@@ -95,6 +96,7 @@ export class SocietyController {
     return memberOf;
   }
 
+  // TODO : Test this and proabaly optimize it
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiOkResponse({
     description: 'List All Members of Society',
@@ -102,14 +104,14 @@ export class SocietyController {
   })
   @ApiBearerAuth()
   @Get('/members/:sid')
-  async listMembers(@Param('sid') sid: string): Promise<void> {
+  async listMembers(@Param('sid') sid: string): Promise<SocietyMember[]> {
     const memberOf = await this.societyService.getMembersOfSociety(sid);
-    // if (!memberOf) {
-    //   throw new HttpException(
-    //     'Something Went Wrong',
-    //     HttpStatus.INTERNAL_SERVER_ERROR,
-    //   );
-    // }
-    // return memberOf;
+    if (!memberOf) {
+      throw new HttpException(
+        'Something Went Wrong',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+    return memberOf;
   }
 }

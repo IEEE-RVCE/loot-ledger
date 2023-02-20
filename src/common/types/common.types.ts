@@ -16,3 +16,17 @@ export enum memberPosition {
   'SOCIETY_TREASURER' = 'SOCIETY_TREASURER',
   'TREASURER' = 'TREASURER',
 }
+
+export type SocietyMember = {
+  member_position: memberPosition;
+  member_tenure_start: Date;
+  member_tenure_end: Date;
+  user_id: string;
+  user_name: string;
+  user_phone: string;
+  user_type: UserType;
+  user_department: string;
+  user_isActive: boolean;
+  society_id: string;
+  society_name: string;
+};

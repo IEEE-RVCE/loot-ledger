@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MysqlErrorCode } from 'src/common/enums/error-codes.enum';
+import { SocietyMember } from 'src/common/types/common.types';
 import { UsersService } from 'src/users/services/users.service';
 import { Repository } from 'typeorm';
 import { addMemberSocietyDto } from '../dto/create-member.dto';
@@ -54,6 +55,10 @@ export class SocietyService {
     return await this.societyRepository.find();
   }
 
+  /**
+   * @description Links Member to Society with the given details such as position, tenureStart, tenureEnd
+   * TODO: This function is making several queries to the database, should be optimized by using a single query
+   */
   async addMemberToSociety(memDeets: addMemberSocietyDto): Promise<MemberOf> {
     const { sid, uid, ...restDeets } = memDeets;
     const society = await this.getSocietyById(sid);
@@ -92,7 +97,7 @@ export class SocietyService {
     }
   }
 
-  async getMembersOfSociety(sid: string): Promise<void> {
+  async getMembersOfSociety(sid: string): Promise<SocietyMember[]> {
     const society = await this.getSocietyById(sid);
     if (!society) {
       throw new HttpException(
@@ -101,15 +106,22 @@ export class SocietyService {
       );
     }
 
-    const members = await this.societyRepository.manager.find(MemberOf, {
-      where: {
-        society,
-      },
-      relations: ['user'],
-    });
+    // * This query is custom written to get the members of a society; didnt find a way to do it using typeorm
+    const members: SocietyMember[] = await this.societyRepository.manager.query(
+      `SELECT member.position AS member_position, member.tenure_start AS member_tenure_start, member.tenure_end AS member_tenure_end, user.id AS user_id, user.name AS user_name, user.phone AS user_phone, user.type AS user_type, user.department AS user_department, user.isActive AS user_isActive,
+        society.id AS society_id, society.name AS society_name
+        FROM member_of member
+        LEFT JOIN users user ON user.id=member.userId
+        LEFT JOIN socities society ON society.id=member.societyId
+        WHERE member.societyId = ${sid}`,
+    );
 
-    // add position to the user object
-
-    // return members.map((member) => member.user);
+    if (!members.length) {
+      throw new HttpException(
+        `Society [${society.name}] doesn't have any members`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    return members;
   }
 }
