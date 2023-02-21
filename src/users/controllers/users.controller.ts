@@ -8,6 +8,7 @@ import {
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { Roles } from 'src/auth/roles/roles.decorator';
+import { Role } from 'src/common/types/common.types';
 import { ActiveUser } from '../../common/decorators/active-user.decorator';
 
 import { User } from '../entities/user.entitiy';
@@ -27,7 +28,7 @@ export class UsersController {
     return this.usersService.getMe(userId);
   }
 
-  @Roles('ADMIN')
+  @Roles(Role.SUPER_ADMIN)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiOkResponse({
     description: 'Get All Users',

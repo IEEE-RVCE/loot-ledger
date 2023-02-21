@@ -15,7 +15,9 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { SocietyMember } from 'src/common/types/common.types';
+import { RoleGuard } from 'src/auth/guards/role.guard';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { Role, SocietyMember } from 'src/common/types/common.types';
 import { addMemberSocietyDto } from '../dto/create-member.dto';
 import { createSocietyDto } from '../dto/create-society.dto';
 import { MemberOf } from '../entities/member.entitiy';
@@ -24,10 +26,11 @@ import { SocietyService } from '../services/society.service';
 
 @ApiTags('society')
 @Controller('society')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RoleGuard)
 export class SocietyController {
   constructor(private readonly societyService: SocietyService) {}
 
+  @Roles(Role.SUPER_ADMIN)
   @ApiOkResponse({ description: 'Create Society', type: Society })
   @Post()
   async createSociety(@Body() society: createSocietyDto): Promise<Society> {
@@ -60,6 +63,7 @@ export class SocietyController {
     return soc;
   }
 
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiOkResponse({
     description: 'Get All Society Details ',
@@ -76,6 +80,7 @@ export class SocietyController {
     return soc;
   }
 
+  @Roles(Role.SUPER_ADMIN, Role.ADMIN)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiOkResponse({
     description: 'Add Member to Society',
