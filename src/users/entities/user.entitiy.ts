@@ -49,7 +49,11 @@ export class User extends BaseEntity {
   phone: string;
 
   @ApiProperty({ description: 'Type of User', example: 'FACULTY/STUDENT' })
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: UserType,
+    default: UserType.STUDENT,
+  })
   type: UserType;
 
   @ApiProperty({ description: 'Department of user', example: 'CSE' })
@@ -68,7 +72,11 @@ export class User extends BaseEntity {
   isVerified: boolean;
 
   @ApiProperty({ description: 'User Role', example: 'USER', enum: Role })
-  @Column({ default: Role.USER })
+  @Column({
+    type: 'enum',
+    enum: Role,
+    default: Role.USER,
+  })
   role: Role;
 
   @ApiProperty({ description: 'Created date of user' })

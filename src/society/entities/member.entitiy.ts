@@ -28,7 +28,11 @@ export class MemberOf {
     description: 'Position Of Member',
     example: 'CHAIR',
   })
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: memberPosition,
+    default: memberPosition.MEMBER,
+  })
   position: memberPosition;
 
   @ApiProperty({ description: 'Tenure Start', example: '2021-01-01' })
@@ -59,11 +63,4 @@ export class MemberOf {
   @ApiProperty({ description: 'Updated At' })
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
-
-  // make sure there is only one entry for a user in a MemberOf table with position as unqiue
 }
-
-// make sure that there is only one entry for a user in a MemberOf table
-
-// Path: src/society/entities/member.entitiy.ts
-// Compare this snippet from src/auth/dto/sign-up.dto.ts:

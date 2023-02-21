@@ -21,6 +21,8 @@ export enum memberPosition {
   'SOCIETY_SECRETARY' = 'SOCIETY_SECRETARY',
   'SOCIETY_TREASURER' = 'SOCIETY_TREASURER',
   'TREASURER' = 'TREASURER',
+  // just for default value
+  'MEMBER' = 'MEMBER',
 }
 
 export type SocietyMember = {
