@@ -9,7 +9,7 @@ export enum UserType {
   'STUDENT' = 'STUDENT',
   'ADMIN' = 'ADMIN',
 }
-5;
+
 export enum memberPosition {
   'CHAIR' = 'CHAIR',
   'VICE_CHAIR' = 'VICE_CHAIR',
@@ -21,7 +21,6 @@ export enum memberPosition {
   'SOCIETY_SECRETARY' = 'SOCIETY_SECRETARY',
   'SOCIETY_TREASURER' = 'SOCIETY_TREASURER',
   'TREASURER' = 'TREASURER',
-  // just for default value
   'MEMBER' = 'MEMBER',
 }
 
@@ -38,3 +37,27 @@ export type SocietyMember = {
   society_id: string;
   society_name: string;
 };
+
+// Refer README.md for more details on each field
+export enum transactionType {
+  'DEBIT' = 'DEBIT',
+  'CREDIT' = 'CREDIT',
+  'OPENING_BALANCE' = 'OPENING_BALANCE',
+  'CLOSING_BALANCE' = 'CLOSING_BALANCE',
+  'DEFAULT' = 'DEFAULT',
+}
+
+export enum transactionStatus {
+  'PENDING' = 'PENDING',
+  'APPROVED' = 'APPORVED',
+  'REJECTED' = 'REJECTED',
+  'DEFAULT' = 'DEFAULT',
+}
+
+export enum bufferType {
+  'BILL' = 'BILL',
+  'REPORT' = 'REPORT',
+  'PERMISSION_DOC' = 'PERMISSION_DOC',
+  'BUDGET' = 'BUDGET',
+  'DEFAULT' = 'DEFAULT',
+}

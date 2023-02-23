@@ -78,3 +78,90 @@ $ yarn test:watch
 ## License
 
 Release under the terms of [MIT](./LICENSE)
+
+## Database Schema
+
+- ER Diagram
+
+![ER Diagram](https://i.ibb.co/HP0f7sg/image-3.png)<br/>
+
+- Relational Schema
+
+![Relational Schema](https://i.ibb.co/bdpQkPT/image-4.png)
+
+- Tables
+  - user
+  - society
+  - member_of
+  - event
+  - handled
+  - transaction
+  - signed_off
+  - buffer_store
+  - assets
+  - documents
+
+## References
+
+1. Transaction Types
+
+```
+export enum transactionType {
+'DEBIT' = 'DEBIT',
+'CREDIT' = 'CREDIT',
+'OPENING_BALANCE' = 'OPENING_BALANCE',
+'CLOSING_BALANCE' = 'CLOSING_BALANCE',
+'DEFAULT' = 'DEFAULT',
+}
+```
+
+- DEBIT: A debit transaction records an increase in assets or a decrease in liabilities or equity.
+- CREDIT: A credit transaction records a decrease in assets or an increase in liabilities or equity.
+- OPENING_BALANCE: An opening balance transaction records the starting balance of an account or period.
+- CLOSING_BALANCE: A closing balance transaction records the ending balance of an account or period.
+- DEFAULT: A default transaction is a catch-all category for transactions that do not fit into any of the other types.
+
+2. Transaction Status
+
+```
+export enum transactionStatus {
+'PENDING' = 'PENDING',
+'APPROVED' = 'APPORVED',
+'REJECTED' = 'REJECTED',
+'DEFAULT' = 'DEFAULT',
+}
+```
+
+- PENDING: A pending transaction is a transaction that is yet to be approved or rejected.
+- APPROVED: An approved transaction is a transaction that has been approved by the the highest stakeholder.
+- REJECTED: A rejected transaction is a transaction that has been rejected by the any one of the stakeholder.
+- DEFAULT: A default transaction is the initial status when it has not uploaded completly.
+
+3. Member Positions
+
+```
+export enum memberPosition {
+'CHAIR' = 'CHAIR',
+'TREASURER' = 'TREASURER',
+'VICE_CHAIR' = 'VICE_CHAIR',
+'SECRETARY' = 'SECRETARY',
+'BRANCH_COUNSELLOR' = 'BRANCH_COUNSELLOR',
+'SOCIETY_COUNSELLOR' = 'SOCIETY_COUNSELLOR',
+'SOCIETY_CHAIR' = 'SOCIETY_CHAIR',
+'SOCIETY_VICE_CHAIR' = 'SOCIETY_VICE_CHAIR',
+'SOCIETY_SECRETARY' = 'SOCIETY_SECRETARY',
+'SOCIETY_TREASURER' = 'SOCIETY_TREASURER',
+'MEMBER' = 'MEMBER',
+}
+```
+
+- CHAIR: A chair is the highest student position in the branch.
+- VICE_CHAIR: A vice chair is the second highest student position in the branch.
+- TREASURER: A treasurer handles every financial transactions, manages report for the whole branch.
+- SECRETARY: A secretary is part of main execom.
+- BRANCH_COUNSELLOR: A branch counsellor is a faculty member who is incharge of the branch.
+- SOCIETY_COUNSELLOR: A society counsellor is a faculty member who is incharge of the society.
+- SOCIETY_CHAIR: A society chair is the highest student position in the society.
+- SOCIETY_VICE_CHAIR: A society vice chair is the second highest student position in the society.
+- SOCIETY_SECRETARY: A society secretary is part of main execom.
+- SOCIETY_TREASURER: A society treasurer handles every financial transactions, manages report only for respective society.

@@ -1,13 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { BufferStore } from 'src/buffer/entities/buffer.entity';
 import { Society } from 'src/society/entities/society.entitiy';
-import { User } from 'src/users/entities/user.entitiy';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -36,7 +35,7 @@ export class Events {
     nullable: true,
   })
   @Column()
-  foundedDate: Date;
+  conductedDate: Date;
 
   @ApiProperty({ description: 'Created date of Event' })
   @CreateDateColumn({ name: 'created_at' })
@@ -51,4 +50,10 @@ export class Events {
     name: 'conducted',
   })
   societies: Society[];
+
+  // @ManyToMany(() => Buffer)
+  // @JoinTable({
+  //   name: 'documents',
+  // })
+  // documents: BufferStore[];
 }

@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD } from '@nestjs/core';
 
 import { AuthModule } from './auth/auth.module';
 import appConfig from './common/config/app.config';
@@ -9,11 +8,12 @@ import jwtConfig from './common/config/jwt.config';
 import { validate } from './common/validation/env.validation';
 import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
-import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import redisConfig from './common/config/redis.config';
 import { RedisModule } from './redis/redis.module';
 import { SocietyModule } from './society/society.module';
 import { EventsModule } from './events/events.module';
+import { TransactionsModule } from './transactions/transactions.module';
+import { BufferModule } from './buffer/buffer.module';
 import swaggerConfig from './common/config/swagger.config';
 
 @Module({
@@ -29,14 +29,10 @@ import swaggerConfig from './common/config/swagger.config';
     UsersModule,
     SocietyModule,
     EventsModule,
+    TransactionsModule,
+    BufferModule,
   ],
   controllers: [],
-  // auth guard for only specific routes
-  providers: [
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: JwtAuthGuard,
-    // },
-  ],
+  providers: [],
 })
 export class AppModule {}
