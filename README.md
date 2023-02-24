@@ -66,6 +66,58 @@ $ yarn test:watch
 
 [![](https://mermaid.ink/img/pako:eNqFVMtugzAQ_BXkc_IDHCqlJYdK6aEhvXFxYWmQwLb8iIqi_HtNMMFrO-oNz6w8s95ZrqTmDZCc_EgqztmpqFiW7YTYbl92Rp_fONOS9z3IFf9SIFN4yesO9JiiTpIyRWvdcZai9xdgOkW8mrbFYncOGXNOS5CXroaFd0dHHkFw1Wkux4VfEVvyMZafh_lu3Jzr1rvbOzoS340RfHf0QOujeQoYWUuwTgRiqeSD40F4kjGKS7F0ksDywUCXEXuS_nmhsUwAYYEwGI-seBIIeBRgkRDDKsp8z2tRkQMdQaqKTPA9ne4j2pEwQjOW3I0nY5qpxE7EbU8osCZy-840SEb7rABheWBWfTWPtwVlGrlFWDo5eJC-SQ9KOdz__uMQzylcLOQzhJ8mNwqVbzhEXQ6cfbIhA8iBdo39V14nuCL6DANUJLefDbTU9Hpq4GZLqdG8HFlNci0NbIgRDdVQdNS2P5C8pb2C2x-pavjI?type=png)](https://mermaid.live/edit#pako:eNqFVMtugzAQ_BXkc_IDHCqlJYdK6aEhvXFxYWmQwLb8iIqi_HtNMMFrO-oNz6w8s95ZrqTmDZCc_EgqztmpqFiW7YTYbl92Rp_fONOS9z3IFf9SIFN4yesO9JiiTpIyRWvdcZai9xdgOkW8mrbFYncOGXNOS5CXroaFd0dHHkFw1Wkux4VfEVvyMZafh_lu3Jzr1rvbOzoS340RfHf0QOujeQoYWUuwTgRiqeSD40F4kjGKS7F0ksDywUCXEXuS_nmhsUwAYYEwGI-seBIIeBRgkRDDKsp8z2tRkQMdQaqKTPA9ne4j2pEwQjOW3I0nY5qpxE7EbU8osCZy-840SEb7rABheWBWfTWPtwVlGrlFWDo5eJC-SQ9KOdz__uMQzylcLOQzhJ8mNwqVbzhEXQ6cfbIhA8iBdo39V14nuCL6DANUJLefDbTU9Hpq4GZLqdG8HFlNci0NbIgRDdVQdNS2P5C8pb2C2x-pavjI)
 
+## Folder Structure
+
+```bash
+src
+├── auth
+│   ├── controllers
+│   ├── dto
+│   ├── guards
+│   ├── roles
+│   └── services
+├── buffer
+│   ├── controllers
+│   ├── dto
+│   ├── entities
+│   └── services
+├── common
+│   ├── config
+│   ├── constants
+│   ├── decorators
+│   ├── enums
+│   ├── interceptors
+│   ├── interfaces
+│   ├── types
+│   └── validation
+├── database
+├── events
+│   ├── controllers
+│   ├── dto
+│   ├── entities
+│   └── services
+├── redis
+├── society
+│   ├── controllers
+│   ├── dto
+│   ├── entities
+│   └── services
+├── transactions
+│   ├── controllers
+│   ├── dto
+│   ├── entities
+│   └── services
+└── users
+    ├── controllers
+    ├── dtos
+    ├── entities
+    └── services
+
+42 directories
+```
+
+This is the folder structure of the project, each folder has its own purpose, for more details take a look at [Folder Structure](./FOLDER_STRUCTURE.md)
+
 ## Hireachy
 
 ![README drawio](https://user-images.githubusercontent.com/71436720/152999124-11b02319-4529-4d5b-a248-02e5ff1a4124.png)
@@ -90,16 +142,18 @@ Release under the terms of [MIT](./LICENSE)
 ![Relational Schema](https://i.ibb.co/bdpQkPT/image-4.png)
 
 - Tables
-  - user
-  - society
-  - member_of
-  - event
-  - handled
-  - transaction
-  - signed_off
-  - buffer_store
-  - assets
-  - documents
+- assets
+- buffer_store
+- conducted
+- documents
+- events
+- handled
+- member_of
+- signed_off
+- socities
+- spent
+- transactions
+- users
 
 ## References
 
