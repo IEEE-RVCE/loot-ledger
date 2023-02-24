@@ -61,6 +61,27 @@ export class SocietyService {
    */
   async addMemberToSociety(memDeets: addMemberSocietyDto): Promise<MemberOf> {
     const { sid, uid, ...restDeets } = memDeets;
+
+    // * This will add the member to the society in a single query but it's very hard to catch the proper error and return it to the user
+    // try {
+    //   return await this.societyRepository.query(
+    //     `INSERT INTO member_of (societyId, userId, position, tenure_start, tenure_end) VALUES (${sid}, '${uid}', '${restDeets.position}', '${restDeets.tenureStart}', '${restDeets.tenureEnd}');`
+    //   ) as MemberOf;
+    // } catch (error) {
+    //   if (error.code === MysqlErrorCode.MissingForeignKey) {
+    //     throw new HttpException(
+    //       `Society Id [${sid}] or User Id [${uid}] doesn't exist`,
+    //       HttpStatus.NOT_FOUND,
+    //     );
+    //   }
+    //   else if (error.code === MysqlErrorCode.UniqueViolation) {
+    //     throw new ConflictException(
+    //       `User [${uid}] already a execom of society [${sid}]`,
+    //     );
+    //   }
+    //   throw error;
+    // }
+
     const society = await this.getSocietyById(sid);
     const user = await this.userService.getMe(uid);
     if (!society) {
@@ -83,8 +104,7 @@ export class SocietyService {
     member.tenureStart = restDeets.tenureStart;
     member.tenureEnd = restDeets.tenureEnd;
 
-    // wrap this under try catch block to catch unique constraint violation
-
+    // * wrap this under try catch block to catch unique constraint violation
     try {
       return await this.societyRepository.manager.save(member);
     } catch (error) {
