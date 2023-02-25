@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { MysqlErrorCode } from 'src/common/enums/error-codes.enum';
 import { SocietyMember } from 'src/common/types/common.types';
+import { User } from 'src/users/entities/user.entitiy';
 import { UsersService } from 'src/users/services/users.service';
 import { Repository } from 'typeorm';
 import { addMemberSocietyDto } from '../dto/create-member.dto';
@@ -19,7 +20,6 @@ export class SocietyService {
   constructor(
     @InjectRepository(Society)
     private readonly societyRepository: Repository<Society>,
-    private readonly userService: UsersService,
   ) {}
 
   async createSociety(society: createSocietyDto): Promise<Society> {
@@ -57,64 +57,60 @@ export class SocietyService {
 
   /**
    * @description Links Member to Society with the given details such as position, tenureStart, tenureEnd
-   * TODO: This function is making several queries to the database, should be optimized by using a single query
+   *
    */
   async addMemberToSociety(memDeets: addMemberSocietyDto): Promise<MemberOf> {
     const { sid, uid, ...restDeets } = memDeets;
 
-    // * This will add the member to the society in a single query but it's very hard to catch the proper error and return it to the user
-    // try {
-    //   return await this.societyRepository.query(
-    //     `INSERT INTO member_of (societyId, userId, position, tenure_start, tenure_end) VALUES (${sid}, '${uid}', '${restDeets.position}', '${restDeets.tenureStart}', '${restDeets.tenureEnd}');`
-    //   ) as MemberOf;
-    // } catch (error) {
-    //   if (error.code === MysqlErrorCode.MissingForeignKey) {
-    //     throw new HttpException(
-    //       `Society Id [${sid}] or User Id [${uid}] doesn't exist`,
-    //       HttpStatus.NOT_FOUND,
-    //     );
-    //   }
-    //   else if (error.code === MysqlErrorCode.UniqueViolation) {
-    //     throw new ConflictException(
-    //       `User [${uid}] already a execom of society [${sid}]`,
-    //     );
-    //   }
-    //   throw error;
-    // }
+    // * Running all the queries in a single transaction
+    return await this.societyRepository.manager.transaction(
+      async (transactionalEntityManager) => {
+        const user = await transactionalEntityManager
+          .getRepository(User)
+          .findOneBy({
+            id: uid,
+          });
 
-    const society = await this.getSocietyById(sid);
-    const user = await this.userService.getMe(uid);
-    if (!society) {
-      throw new HttpException(
-        `Society Id [${sid}] doesn't exist`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-    if (!user) {
-      throw new HttpException(
-        `User Id[${uid}] doesn't exist`,
-        HttpStatus.NOT_FOUND,
-      );
-    }
-    const member = new MemberOf();
+        if (!user) {
+          throw new HttpException(
+            `User Id[${uid}] doesn't exist`,
+            HttpStatus.NOT_FOUND,
+          );
+        }
+        const society = await transactionalEntityManager
+          .getRepository(Society)
+          .findOneBy({
+            id: sid,
+          });
 
-    member.society = society;
-    member.user = user;
-    member.position = restDeets.position;
-    member.tenureStart = restDeets.tenureStart;
-    member.tenureEnd = restDeets.tenureEnd;
+        if (!society) {
+          throw new HttpException(
+            `Society Id [${sid}] doesn't exist`,
+            HttpStatus.NOT_FOUND,
+          );
+        }
 
-    // * wrap this under try catch block to catch unique constraint violation
-    try {
-      return await this.societyRepository.manager.save(member);
-    } catch (error) {
-      if (error.code === MysqlErrorCode.UniqueViolation) {
-        throw new ConflictException(
-          `User [${user.name}] already a execom of society [${society.name}]`,
-        );
-      }
-      throw error;
-    }
+        const member = new MemberOf();
+
+        member.society = society;
+        member.user = user;
+        member.position = restDeets.position;
+        member.tenureStart = restDeets.tenureStart;
+        member.tenureEnd = restDeets.tenureEnd;
+
+        // * wrap this under try catch block to catch unique constraint violation
+        try {
+          return await this.societyRepository.manager.save(member);
+        } catch (error) {
+          if (error.code === MysqlErrorCode.UniqueViolation) {
+            throw new ConflictException(
+              `User [${user.name}] already a execom of society [${society.name}]`,
+            );
+          }
+          throw error;
+        }
+      },
+    );
   }
 
   async getMembersOfSociety(sid: string): Promise<SocietyMember[]> {

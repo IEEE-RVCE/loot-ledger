@@ -1,6 +1,6 @@
 ## Folder Structure
 
-```bash
+```
 src
 ├── auth
 │   ├── controllers
