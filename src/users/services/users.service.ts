@@ -34,8 +34,8 @@ export class UsersService {
   async createUser(userDeets: userParams): Promise<User> {
     try {
       const user = new User();
-      user.password = await this.bcryptService.hash(userDeets.password);
       Object.assign(user, userDeets);
+      user.password = await this.bcryptService.hash(userDeets.password);
       return await this.userRepository.save(user);
     } catch (error) {
       if (error.code === MysqlErrorCode.UniqueViolation) {
