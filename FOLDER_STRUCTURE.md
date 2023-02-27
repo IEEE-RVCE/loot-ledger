@@ -1,6 +1,6 @@
 ## Folder Structure
 
-```bash
+```
 src
 ├── auth
 │   ├── controllers
@@ -92,4 +92,44 @@ src/buffer
 4 directories
 ```
 
-<!-- TODO Add Remaining Modules-->
+### Common
+
+This is only the exception to the rule, think this folder as utilities, it has some of the common files which are used in multiple modules such as constants, decorators, enums, interceptors, interfaces, types and validation.
+
+```bash
+src/common
+├── config
+├── constants
+├── decorators
+├── enums
+├── interceptors
+├── interfaces
+├── types
+└── validation
+
+8 directories
+```
+
+### Database
+
+This folder exposes the database connection and some configuration for the database and exposes database connection as database provider, this folder is only used in the `app.module.ts` file.
+
+### Events
+
+This module is responsible for the CRUD of events , (standard CRUD operations) has similar folder structure.
+
+### Redis
+
+This folder exposes the redis connection and some configuration for the redis and exposes redis connection as redis provider, this folder is only used in the `app.module.ts` file.
+
+### Society
+
+This module is responsible for the CRUD of societies , (standard CRUD operations) has similar folder structure.
+
+### Transactions
+
+This module is responsible for the CRUD of transactions , (standard CRUD operations) has similar folder structure.
+
+### Users
+
+This module is responsible for the CRUD of users , (standard CRUD operations) has similar folder structure.
